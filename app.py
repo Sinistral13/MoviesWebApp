@@ -61,15 +61,24 @@ def add_movie(user_id):
 
     #redundant in this structure, kept for scaling
     if not title:
-        return {"error": "Missing title!"}, 400
+        return render_template(
+                    "error.html",
+                    message="Missing Title."
+                    ), 400
 
     movie_data = fetch_data(title)
     
     if not movie_data:
-        return {"error": "Movie not found!"}, 404
+        return render_template(
+                    "error.html",
+                    message="Movie not Found!"
+                    ), 404
     
     if data_manager.movie_exists(movie_data, user_id):
-        return {"error": "Movie already in favorites of this user!"}, 409
+        return render_template(
+                    "error.html",
+                    message="Movie already in favorites for this user!"
+                    ), 409
 
     data_manager.add_movie(movie_data, user_id)
 
@@ -90,16 +99,6 @@ def delete_movie(user_id, movie_id):
     data_manager.delete_movie(movie_id)
 
     return redirect(f"/users/{user_id}/movies")
-
-
-@app.errorhandler(400)
-def page_not_found(e):
-    return render_template("404.html"), 400
-
-
-@app.errorhandler(404)
-def internal_error(e):
-    return render_template("500.html"), 404
 
 
 if __name__ == '__main__':
