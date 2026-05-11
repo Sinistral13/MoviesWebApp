@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 
 def fetch_data(title):
     """
-    Fetche movie data for a given title.
+    Fetch movie data for a given title.
     Return a dictionary with movie details.
     Return an empty dictionary if the movie is not found or an error occurs.
     """
@@ -21,9 +21,11 @@ def fetch_data(title):
     try:
         data = requests.get(url).json()
     except requests.exceptions.RequestException:
-        return "No connection to the API. Try again later."
+        print("No connection to the API. Try again later.")
+        return {}
     #response means movie not found
     if data.get("Error"):
-        return f'Movie "{title}" not found in API database.'
+        print(f'Movie "{title}" not found in API database.')
+        return {}
 
     return data
