@@ -1,6 +1,5 @@
 import os
 from flask import Flask, render_template, request, redirect
-from sqlalchemy.exc import IntegrityError
 from models import db
 from data_fetcher import fetch_data
 from data_manager import DataManager
@@ -8,7 +7,9 @@ from data_manager import DataManager
 app = Flask(__name__)
 
 basedir = os.path.abspath(os.path.dirname(__file__))
-app.config['SQLALCHEMY_DATABASE_URI'] = f"sqlite:///{os.path.join(basedir, 'data', 'movies.sqlite')}"
+app.config['SQLALCHEMY_DATABASE_URI'] = (
+               f"sqlite:///{os.path.join(basedir, 'data', 'movies.sqlite')}"
+               )
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db.init_app(app)
@@ -19,8 +20,8 @@ data_manager = DataManager()
 @app.route("/", methods=["GET"])
 def index():
     """
-    The home page of your application. 
-    Show a list of all registered users 
+    The home page of your application.
+    Show a list of all registered users
     and a form for adding new users.
     """
     users = data_manager.get_users()
@@ -67,13 +68,13 @@ def add_movie(user_id):
                     ), 400
 
     movie_data = fetch_data(title)
-    
+
     if not movie_data:
         return render_template(
                     "error.html",
                     message="Movie not Found!"
                     ), 404
-    
+
     if data_manager.movie_exists(movie_data, user_id):
         return render_template(
                     "error.html",

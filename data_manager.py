@@ -2,7 +2,7 @@ from models import db, User, Movie
 
 
 class DataManager():
-    
+
     def movie_exists(self, movie, user_id):
         """
         Check for user already having the movie
@@ -67,6 +67,6 @@ class DataManager():
     def delete_movie(self, movie_id):
         """Delete a movie from the database."""
         movie = Movie.query.get_or_404(movie_id)
-        
+
         db.session.delete(movie)
         db.session.commit()
